@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pharmacy Reorder Demo</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    section { margin-bottom: 20px; }
+    input, button { margin: 5px; }
+  </style>
+</head>
+<body>
+<h1>Pharmacy Reorder Demo</h1>
+<section>
+  <h2>Add Prescription</h2>
+  <input id="patient" placeholder="Patient ID">
+  <input id="medication" placeholder="Medication">
+  <input id="repeats" type="number" placeholder="Repeats">
+  <input id="expiry" type="date" placeholder="Expiry">
+  <button onclick="addPrescription()">Add</button>
+</section>
+<section>
+  <h2>Place Order</h2>
+  <input id="prescriptionId" placeholder="Prescription ID">
+  <input id="quantity" type="number" placeholder="Quantity">
+  <button onclick="placeOrder()">Order</button>
+</section>
+<section>
+  <h2>Data</h2>
+  <pre id="output"></pre>
+</section>
+<script>
+async function addPrescription() {
+  const data = {
+    patientId: document.getElementById('patient').value,
+    medication: document.getElementById('medication').value,
+    repeats: parseInt(document.getElementById('repeats').value, 10),
+    expiry: document.getElementById('expiry').value
+  };
+  const res = await fetch('/api/prescriptions', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data)});
+  document.getElementById('output').textContent = await res.text();
+}
+async function placeOrder() {
+  const data = {
+    prescriptionId: document.getElementById('prescriptionId').value,
+    quantity: parseInt(document.getElementById('quantity').value, 10)
+  };
+  const res = await fetch('/api/orders', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data)});
+  document.getElementById('output').textContent = await res.text();
+}
+</script>
+</body>
+</html>
